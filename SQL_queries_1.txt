@@ -1,0 +1,323 @@
+CREATE DATABASE Assignment_2;
+USE Assignment_2;
+CREATE TABLE Customers(cust_no int,cust_fname varchar(15),cust_lname varchar(15),cust_company varchar(20),cust_addr varchar(25),city varchar(15),cust_phone LONG, primary key(cust_no));
+
+create table Authors(author_no int,author_name varchar(15),country varchar(15),primary key(author_no));
+
+create table Publisher(publisher_no int,publisher_name varchar(10),publisher_addr varchar(20),year int,primary key(publisher_no));
+
+CREATE TABLE Books(ISBN varchar(15),title varchar(25),unit_price FLOAT,author_no INT,publisher_no INT,pub_year INT,primary key(ISBN),FOREIGN KEY(Author_no) REFERENCES Authors(Author_no)  ON DELETE CASCADE,FOREIGN KEY(Publisher_no) REFERENCES Publisher(Publisher_no)  ON DELETE CASCADE);
+);
+
+
+ CREATE TABLE Ordering(order_no int,cust_no int,ISBN varchar(15),qty int,odate DATE,foreign key(cust_no) references Customers(cust_no) ON DELETE CASCADE, FOREIGN KEY(ISBN) REFERENCES Books(ISBN) ON DELETE CASCADE);
+mysql> desc Customers;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| cust_no      | int         | NO   | PRI | NULL    |       |
+| cust_fname   | varchar(15) | YES  |     | NULL    |       |
+| cust_lname   | varchar(15) | YES  |     | NULL    |       |
+| cust_company | varchar(20) | YES  |     | NULL    |       |
+| cust_addr    | varchar(25) | YES  |     | NULL    |       |
+| city         | varchar(15) | YES  |     | NULL    |       |
+| cust_phone   | mediumtext  | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+7 rows in set (0.14 sec)
+
+mysql> desc authors;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| author_no   | int         | NO   | PRI | NULL    |       |
+| author_name | varchar(15) | YES  |     | NULL    |       |
+| country     | varchar(15) | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> desc publisher;
++----------------+-------------+------+-----+---------+-------+
+| Field          | Type        | Null | Key | Default | Extra |
++----------------+-------------+------+-----+---------+-------+
+| publisher_no   | int         | NO   | PRI | NULL    |       |
+| publisher_name | varchar(10) | YES  |     | NULL    |       |
+| publisher_addr | varchar(20) | YES  |     | NULL    |       |
+| year           | int         | YES  |     | NULL    |       |
++----------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> desc books;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| ISBN         | varchar(15) | NO   | PRI | NULL    |       |
+| title        | varchar(25) | YES  |     | NULL    |       |
+| unit_price   | float       | YES  |     | NULL    |       |
+| author_no    | int         | YES  | MUL | NULL    |       |
+| publisher_no | int         | YES  | MUL | NULL    |       |
+| pub_year     | int         | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> desc ordering;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| order_no | int         | YES  |     | NULL    |       |
+| cust_no  | int         | YES  | MUL | NULL    |       |
+| ISBN     | varchar(15) | YES  | MUL | NULL    |       |
+| qty      | int         | YES  |     | NULL    |       |
+| odate    | date        | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+5 rows in set (0.08 sec)
+
+
+1. Insert at least 10 records in customer table and insert other tables accordingly.
+select * from Customers;
++---------+------------+-------------+--------------+----------------+------------+------------+
+| cust_no | cust_fname | cust_lname  | cust_company | cust_addr      | city       | cust_phone |
++---------+------------+-------------+--------------+----------------+------------+------------+
+|       1 | Meghan     | Kulkarni    | Siemens      | Thane(W)       | Thane      | 945612347  |
+|       3 | Arya       | Karambelkar | Oracle       | Panvel         | Mumbai     | 701010101  |
+|       5 | Harsh      | Deshpande   | TCS          | Kalyan         | Mumbai     | 914628746  |
+|       6 | Paul       | Kulkarni    | SC Johnson   | Kandivili West | Mumbai     | 964782348  |
+|       7 | Prashant   | Talavdekar  | Oracle       | Cidco          | Aurangabad | 90001239   |
+|       8 | Deep       | Shahane     | GOOGLE       | Kalyan         | Mumbai     | 964782555  |
+|      10 | Abhishek   | Bhoir       | Starbucks    | thane          | Thane      | 852784813  |
++---------+------------+-------------+--------------+----------------+------------+------------+
+7 rows in set (0.00 sec)
+ select * from authors;
++-----------+-------------+----------------+
+| author_no | author_name | country        |
++-----------+-------------+----------------+
+|       100 | Aamish      | India          |
+|       101 | Smith       | Australia      |
+|       102 | Sharma      | India          |
+|       103 | Brown       | America        |
+|       110 | Doe         | England        |
+|       111 | Kumar       | India          |
+|       115 | Wilson      | United Kingdom |
+|       116 | Johnson     | Australia      |
+|       117 | Dickens     | United Kingdom |
+|      1956 | Narayan     | India          |
++-----------+-------------+----------------+
+10 rows in set (0.00 sec)
+select * from Publisher;
++--------------+----------------+----------------+------+
+| publisher_no | publisher_name | publisher_addr | year |
++--------------+----------------+----------------+------+
+|         1000 |  Zone          | Pune           | 2010 |
+|         1033 | Progress       | Kolkata        | 2016 |
+|         1045 | Exports        | Mumbai         | 2015 |
+|         1055 | Newbooks       | Boston         | 2009 |
+|         1296 | immortals      | London         | 2018 |
+|         1325 | Thakurs        | Mumbai         | 2017 |
+|         1425 | Prospect       | Reading        | 2015 |
+|         1530 | RadicalP       | Fairhaven      | 2020 |
+|         1646 | RareBooks      | brooklyn       | 2016 |
+|        10486 | Primes         | Abington       | 2004 |
++--------------+----------------+----------------+------+
+10 rows in set (0.00 sec)
+mysql> select * from books;
++-----------+-------------------------+------------+-----------+--------------+----------+
+| ISBN      | title                   | unit_price | author_no | publisher_no | pub_year |
++-----------+-------------------------+------------+-----------+--------------+----------+
+| 913464113 | OctoberCountry          |     480.46 |      1956 |         1033 |     2015 |
+| 922660    | Radiance                |        255 |       115 |         1530 |     2003 |
+| 9486234   | ShivaTrilogy            |        380 |       100 |         1000 |     2010 |
+| 955398    | TheDrown                |     178.61 |       101 |        10486 |     2005 |
+| 9601550   | Leaves                  |      313.2 |       117 |        15332 |     2004 |
+| 96020     | Heights                 |     333.24 |       116 |         1325 |     2010 |
+| 964112    | Full Dark               |      425.5 |       110 |         1296 |     2004 |
+| 98134205  | Wide Sea                |      220.4 |       111 |         1646 |     2006 |
+| 9914621   | The story               |        150 |       102 |         1045 |     2015 |
+| 99214112  | A Ring of Endless Light |     346.33 |       103 |         1055 |     2001 |
++-----------+-------------------------+------------+-----------+--------------+----------+
+10 rows in set (0.00 sec)
+
+ select * from ordering;
++----------+---------+-----------+------+------------+
+| order_no | cust_no | ISBN      | qty  | odate      |
++----------+---------+-----------+------+------------+
+|      202 |       1 | 913464113 |    2 | 2019-04-05 |
+|      204 |       3 | 9486234   |    3 | 2020-02-15 |
+|      205 |       5 | 9601550   |    2 | 2020-03-21 |
+|      206 |       7 | 964112    |    1 | 2020-06-15 |
+|      207 |       6 | 96020     |    4 | 2020-09-11 |
+|      208 |       8 | 99214112  |    1 | 2021-05-10 |
+|      210 |      10 | 98134205  |    1 | 2021-08-10 |
++----------+---------+-----------+------+------------+
+7 rows in set (0.08 sec)
+
+Insert in  Customers:
+INSERT INTO Customers VALUES(1, 'Meghan', 'Kulkarni', 'Siemens', 'Thane(W)', 'Thane', 945612347),(2, 'Gauri', 'Mahajan', 'Google', 'Kothrud', 'Pune', 90042223),(3, 'Arya', 'Karambelkar', 'Oracle', 'Panvel', 'Mumbai', 701010101),(4, 'Piyush', 'Bapat', 'Siemens', 'Wakad', 'Pune', 887425631),(5, 'Harsh', 'Deshpande', 'TCS', 'Kalyan', 'Mumbai', 914628746),(6, 'Paul', 'Kulkarni', 'SC Johnson', 'Kandivili West', 'Mumbai', 964782348),(7, 'Prashant', 'Talavdekar', 'Oracle', 'Cidco', 'Aurangabad', 90001239),(8, 'Deep', 'Shahane', 'GOOGLE', 'Kalyan', 'Mumbai', 964782555),(9, 'Harshit', 'Holkar', 'Microsoft', 'Hadapsar', 'Pune', 904258371),(10, 'Abhishek', 'Bhoir', 'Starbucks', 'thane', 'Thane', 852784813);
+Query OK, 10 rows affected (0.10 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+
+Insert in Authors:
+INSERT INTO Authors VALUES(100, 'Aamish', 'India'),(101, 'Smith', 'Australia'),(102, 'Sharma', 'India'),(103, 'Brown', 'America'),(110, 'Doe', 'England'),(111, 'Kumar', 'India'),(115, 'Wilson', 'United Kingdom'),(116, 'Johnson', 'Australia'),(117, 'Dickens', 'United Kingdom'),(1956, 'Narayan', 'India');
+Query OK, 10 rows affected (0.08 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+Insert in Publisher:
+INSERT INTO Publisher VALUES(1000, ' Zone', 'Pune', 2010);
+Query OK, 1 row affected (0.07 sec)
+
+mysql> INSERT INTO Publisher VALUES(1033, 'Progress', 'Kolkata', 2016);
+Query OK, 1 row affected (0.08 sec)
+
+
+mysql> INSERT INTO Publisher VALUES(1045, 'Exports', 'Mumbai', 2015),(1325, 'Thakurs', 'Mumbai', 2017);
+Query OK, 2 rows affected (0.08 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Publisher VALUES(1296, 'immortals', 'London', 2018),(1425, 'Prospect', 'Reading', 2015);
+Query OK, 2 rows affected (0.08 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Publisher VALUES(1530, 'RadicalP', 'Fairhaven', 2020),(1646, 'RareBooks', 'brooklyn', 2016);
+Query OK, 2 rows affected (0.08 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Publisher VALUES(1055, 'Newbooks','Boston', 2009);
+Query OK, 1 row affected (0.00 sec)
+
+Insert in books:
+INSERT INTO Books VALUES('9486234','ShivaTrilogy',380,100,1000,2010);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO Books VALUES('99214112', 'A Ring of Endless Light', 346.33, 103, 1055, 2001),('922660', 'Radiance', 255.00, 115, 1530, 2003),('964112', 'Full Dark', 425.50, 110, 1296, 2004),('955398', 'TheDrown', 178.61, 101, 10486, 2005),('913464113', 'OctoberCountry',480.46, 1956, 1033, 2015),('96020', 'Heights', 333.24, 116, 1325, 2010),('9914621', 'The story', 150.00, 102, 1045, 2015),('9601550', 'Leaves', 313.20, 117, 15332, 2004),('98134205', 'Wide Sea', 220.40, 111, 1646, 2006);
+Query OK, 9 rows affected (0.08 sec)
+Records: 9  Duplicates: 0  Warnings: 0
+
+Insert in ordering:
+INSERT INTO Ordering VALUES(201,2, '9486234', 1, '2019-01-13'),(202,1, '913464113', 2, '2019-04-05'),(203,4, '955398', 1, '2019-10-25'),(204,3, '9486234', 3, '2020-02-15'),(205,5, '9601550', 2, '2020-03-21'),(206,7, '964112',  1, '2020-06-15'),(207,6, '96020', 4, '2020-09-11'),(208,8, '99214112', 1, '2021-05-10'),(209,9, '9914621', 2, '2021-07-17'),(210,10, '98134205', 1, '2021-08-10');
+Query OK, 10 rows affected (0.08 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+2.
+ SELECT * FROM Customers WHERE city IN('Pune', 'Mumbai');
++---------+------------+-------------+--------------+----------------+--------+------------+
+| cust_no | cust_fname | cust_lname  | cust_company | cust_addr      | city   | cust_phone |
++---------+------------+-------------+--------------+----------------+--------+------------+
+|       2 | Gauri      | Mahajan     | Google       | Kothrud        | Pune   | 90042223   |
+|       3 | Arya       | Karambelkar | Oracle       | Panvel         | Mumbai | 701010101  |
+|       4 | Piyush     | Bapat       | Siemens      | Wakad          | Pune   | 887425631  |
+|       5 | Harsh      | Deshpande   | TCS          | Kalyan         | Mumbai | 914628746  |
+|       6 | Paul       | Kulkarni    | SC Johnson   | Kandivili West | Mumbai | 964782348  |
+|       8 | Deep       | Shahane     | GOOGLE       | Kalyan         | Mumbai | 964782555  |
+|       9 | Harshit    | Holkar      | Microsoft    | Hadapsar       | Pune   | 904258371  |
++---------+------------+-------------+--------------+----------------+--------+------------+
+7 rows in set (0.09 sec)
+
+SELECT cust_fname FROM Customers WHERE cust_fname LIKE 'P%' OR cust_fname LIKE 'H%';
++------------+
+| cust_fname |
++------------+
+| Piyush     |
+| Harsh      |
+| Paul       |
+| Prashant   |
+| Harshit    |
++------------+
+5 rows in set (0.00 sec)
+
+3. SELECT DISTINCT city FROM Customers;
++------------+
+| city       |
++------------+
+| Thane      |
+| Pune       |
+| Mumbai     |
+| Aurangabad |
++------------+
+4 rows in set (0.01 sec)
+
+5. DELETE FROM Customers WHERE city = 'Pune';
+Query OK, 3 rows affected (0.08 sec)
+
+4. mysql> SELECT ISBN, Title, Unit_Price, (Unit_Price + 0.05*Unit_Price) AS New_Price FROM Books WHERE Pub_year = 2015;
++-----------+----------------+------------+--------------------+
+| ISBN      | Title          | Unit_Price | New_Price          |
++-----------+----------------+------------+--------------------+
+| 913464113 | OctoberCountry |     480.46 | 504.48299102783204 |
+| 9914621   | The story      |        150 |              157.5 |
++-----------+----------------+------------+--------------------+
+2 rows in set (0.07 sec)
+
+6. SELECT author_name, country FROM Authors WHERE country = 'India'UNION ALL SELECT author_name, country FROM Authors WHERE country = 'Australia';
++-------------+-----------+
+| author_name | country   |
++-------------+-----------+
+| Aamish      | India     |
+| Sharma      | India     |
+| Kumar       | India     |
+| Narayan     | India     |
+| Smith       | Australia |
+| Johnson     | Australia |
++-------------+-----------+
+6 rows in set (0.08 sec)
+
+7. SELECT Publisher_Name, year FROM Publisher WHERE year IN (2015, 2016);
++----------------+------+
+| Publisher_Name | year |
++----------------+------+
+| Progress       | 2016 |
+| Exports        | 2015 |
+| Prospect       | 2015 |
+| RareBooks      | 2016 |
++----------------+------+
+4 rows in set (0.00 sec)
+
+8. SELECT Title, Unit_Price FROM Books WHERE Unit_Price BETWEEN 300 AND 400;
++-------------------------+------------+
+| Title                   | Unit_Price |
++-------------------------+------------+
+| ShivaTrilogy            |        380 |
+| Leaves                  |      313.2 |
+| Heights                 |     333.24 |
+| A Ring of Endless Light |     346.33 |
++-------------------------+------------+
+4 rows in set (0.08 sec)
+
+9. SELECT Title, Unit_Price, Pub_year FROM Books ORDER BY Pub_year DESC;
++-------------------------+------------+----------+
+| Title                   | Unit_Price | Pub_year |
++-------------------------+------------+----------+
+| OctoberCountry          |     480.46 |     2015 |
+| The story               |        150 |     2015 |
+| ShivaTrilogy            |        380 |     2010 |
+| Heights                 |     333.24 |     2010 |
+| Wide Sea                |      220.4 |     2006 |
+| TheDrown                |     178.61 |     2005 |
+| Leaves                  |      313.2 |     2004 |
+| Full Dark               |      425.5 |     2004 |
+| Radiance                |        255 |     2003 |
+| A Ring of Endless Light |     346.33 |     2001 |
++-------------------------+------------+----------+
+10 rows in set (0.00 sec)
+
+11. complex views:
+mysql> CREATE VIEW TITLE_AUTHORS
+    ->  AS SELECT B.TITLE, A.AUTHOR_NAME
+    -> fROM BOOKS B, AUTHORS A
+    ->  WHERE B.AUTHOR_NO=A.AUTHOR_NO;
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> select * from title_authors;
++-------------------------+-------------+
+| TITLE                   | AUTHOR_NAME |
++-------------------------+-------------+
+| OctoberCountry          | Narayan     |
+| Radiance                | Wilson      |
+| ShivaTrilogy            | Aamish      |
+| TheDrown                | Smith       |
+| Leaves                  | Dickens     |
+| Heights                 | Johnson     |
+| Full Dark               | Doe         |
+| Wide Sea                | Kumar       |
+| The story               | Sharma      |
+| A Ring of Endless Light | Brown       |
++-------------------------+-------------+
+10 rows in set (0.08 sec)

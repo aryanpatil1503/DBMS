@@ -1,0 +1,190 @@
+> use B2;
+switched to db B2
+> db.createCollection('students');
+{ "ok" : 1 }
+> db.students.insertMany([ {"roll":1,"name":"John","subject":"Math","marks":91}, {"roll":2,"name":"Jane","subject":"Math","marks":87}, {"roll":3,"name":"Amit","subject":"Physics","marks":88}, {"roll":4,"name":"Akanksha","subject":"Chemistry","marks":82}, {"roll":5,"name":"Arya","subject":"Chemistry","marks":79}, {"roll":6,"name":"Amy","subject":"Physics","marks":94},{"roll":7,"name":"Aryan","subject":"Math","marks":90}]);
+{
+        "acknowledged" : true,
+        "insertedIds" : [
+                ObjectId("61924a75603b92c92b127411"),
+                ObjectId("61924a75603b92c92b127412"),
+                ObjectId("61924a75603b92c92b127413"),
+                ObjectId("61924a75603b92c92b127414"),
+                ObjectId("61924a75603b92c92b127415"),
+                ObjectId("61924a75603b92c92b127416"),
+                ObjectId("61924a75603b92c92b127417")
+        ]
+}
+> db.students.find().pretty();
+{
+        "_id" : ObjectId("61924a75603b92c92b127411"),
+        "roll" : 1,
+        "name" : "John",
+        "subject" : "Math",
+        "marks" : 91
+}
+{
+        "_id" : ObjectId("61924a75603b92c92b127412"),
+        "roll" : 2,
+        "name" : "Jane",
+        "subject" : "Math",
+        "marks" : 87
+}
+{
+        "_id" : ObjectId("61924a75603b92c92b127413"),
+        "roll" : 3,
+        "name" : "Amit",
+        "subject" : "Physics",
+        "marks" : 88
+}
+{
+        "_id" : ObjectId("61924a75603b92c92b127414"),
+        "roll" : 4,
+        "name" : "Akanksha",
+        "subject" : "Chemistry",
+        "marks" : 82
+}
+{
+        "_id" : ObjectId("61924a75603b92c92b127415"),
+        "roll" : 5,
+        "name" : "Arya",
+        "subject" : "Chemistry",
+        "marks" : 79
+}
+{
+        "_id" : ObjectId("61924a75603b92c92b127416"),
+        "roll" : 6,
+        "name" : "Amy",
+        "subject" : "Physics",
+        "marks" : 94
+}
+{
+        "_id" : ObjectId("61924a75603b92c92b127417"),
+        "roll" : 7,
+        "name" : "Aryan",
+        "subject" : "Math",
+        "marks" : 90
+}
+> db.students.createIndex({name:1});
+{
+        "numIndexesBefore" : 1,
+        "numIndexesAfter" : 2,
+        "createdCollectionAutomatically" : false,
+        "ok" : 1
+}
+> db.students.getIndexes();
+[
+        {
+                "v" : 2,
+                "key" : {
+                        "_id" : 1
+                },
+                "name" : "_id_"
+        },
+        {
+                "v" : 2,
+                "key" : {
+                        "name" : 1
+                },
+                "name" : "name_1"
+        }
+]
+> db.students.find().sort({name:1}).pretty();
+{
+        "_id" : ObjectId("61924a75603b92c92b127414"),
+        "roll" : 4,
+        "name" : "Akanksha",
+        "subject" : "Chemistry",
+        "marks" : 82
+}
+{
+        "_id" : ObjectId("61924a75603b92c92b127413"),
+        "roll" : 3,
+        "name" : "Amit",
+        "subject" : "Physics",
+        "marks" : 88
+}
+{
+        "_id" : ObjectId("61924a75603b92c92b127416"),
+        "roll" : 6,
+        "name" : "Amy",
+        "subject" : "Physics",
+        "marks" : 94
+}
+{
+        "_id" : ObjectId("61924a75603b92c92b127415"),
+        "roll" : 5,
+        "name" : "Arya",
+        "subject" : "Chemistry",
+        "marks" : 79
+}
+{
+        "_id" : ObjectId("61924a75603b92c92b127417"),
+        "roll" : 7,
+        "name" : "Aryan",
+        "subject" : "Math",
+        "marks" : 90
+}
+{
+        "_id" : ObjectId("61924a75603b92c92b127412"),
+        "roll" : 2,
+        "name" : "Jane",
+        "subject" : "Math",
+        "marks" : 87
+}
+{
+        "_id" : ObjectId("61924a75603b92c92b127411"),
+        "roll" : 1,
+        "name" : "John",
+        "subject" : "Math",
+        "marks" : 91
+}
+> db.students.find().sort({name:-1});
+{ "_id" : ObjectId("61924a75603b92c92b127411"), "roll" : 1, "name" : "John", "subject" : "Math", "marks" : 91 }
+{ "_id" : ObjectId("61924a75603b92c92b127412"), "roll" : 2, "name" : "Jane", "subject" : "Math", "marks" : 87 }
+{ "_id" : ObjectId("61924a75603b92c92b127417"), "roll" : 7, "name" : "Aryan", "subject" : "Math", "marks" : 90 }
+{ "_id" : ObjectId("61924a75603b92c92b127415"), "roll" : 5, "name" : "Arya", "subject" : "Chemistry", "marks" : 79 }
+{ "_id" : ObjectId("61924a75603b92c92b127416"), "roll" : 6, "name" : "Amy", "subject" : "Physics", "marks" : 94 }
+{ "_id" : ObjectId("61924a75603b92c92b127413"), "roll" : 3, "name" : "Amit", "subject" : "Physics", "marks" : 88 }
+{ "_id" : ObjectId("61924a75603b92c92b127414"), "roll" : 4, "name" : "Akanksha", "subject" : "Chemistry", "marks" : 82 }
+> db.students.createIndex({roll:1},{unique:true});
+{
+        "numIndexesBefore" : 2,
+        "numIndexesAfter" : 3,
+        "createdCollectionAutomatically" : false,
+        "ok" : 1
+}
+> db.students.insert({"roll":4,"name":"Akanksha","subject":"Chemistry","marks":82});
+WriteResult({
+        "nInserted" : 0,
+        "writeError" : {
+                "code" : 11000,
+                "errmsg" : "E11000 duplicate key error collection: B2.students index: roll_1 dup key: { roll: 4.0 }"
+        }
+})
+> db.students.dropIndex({name:1});
+{ "nIndexesWas" : 3, "ok" : 1 }
+> db.students.aggregate([{$group:{_id:"$subject",marks:{$min:"$marks"}}}]);
+{ "_id" : "Chemistry", "marks" : 79 }
+{ "_id" : "Physics", "marks" : 88 }
+{ "_id" : "Math", "marks" : 87 }
+> db.students.aggregate([{$group:{_id:"$subject",marks:{$max:"$marks"}}}]);
+{ "_id" : "Chemistry", "marks" : 82 }
+{ "_id" : "Physics", "marks" : 94 }
+{ "_id" : "Math", "marks" : 91 }
+> db.students.aggregate([{$group:{_id:"$subject",marks:{$avg:"$marks"}}}]);
+{ "_id" : "Chemistry", "marks" : 80.5 }
+{ "_id" : "Math", "marks" : 89.33333333333333 }
+{ "_id" : "Physics", "marks" : 91 }
+> db.students.aggregate([{$group:{_id:"$subject",marks:{$first:"$marks"}}}]);
+{ "_id" : "Chemistry", "marks" : 82 }
+{ "_id" : "Physics", "marks" : 88 }
+{ "_id" : "Math", "marks" : 91 }
+> db.students.aggregate([{$group:{_id:"$subject",marks:{$last:"$marks"}}}]);
+{ "_id" : "Chemistry", "marks" : 79 }
+{ "_id" : "Physics", "marks" : 94 }
+{ "_id" : "Math", "marks" : 90 }
+> db.students.aggregate([{$group:{_id:"$subject",marks:{$sum:"$marks"}}}]);
+{ "_id" : "Chemistry", "marks" : 161 }
+{ "_id" : "Physics", "marks" : 182 }
+{ "_id" : "Math", "marks" : 268 }

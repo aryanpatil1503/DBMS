@@ -1,0 +1,184 @@
+> use B1;
+switched to db B1
+> db.createCollection("Employee");
+{ "ok" : 1 }
+> db.employee.insert({"e_id":1,"e_fname":"John","e_lname":"Doe","salary":5000});
+WriteResult({ "nInserted" : 1 })
+
+> db.employee.insertMany([ {"e_id":2,"e_fname":"Jane","e_lname":"Doe","salary":9000}, {"e_id":4,"e_fname":"Jack","e_lname":"Smith","salary":9000}, {"e_id":10,"e_fname":"Amy","e_lname":"Berry","salary":6000}, {"e_id":11,"e_fname":"Joseph","e_lname":"M","salary":8000}])
+{
+        "acknowledged" : true,
+        "insertedIds" : [
+                ObjectId("6191f1deb1aca74c5496b8a0"),
+                ObjectId("6191f1deb1aca74c5496b8a1"),
+                ObjectId("6191f1deb1aca74c5496b8a2"),
+                ObjectId("6191f1deb1aca74c5496b8a3")
+        ]
+}
+> db.employee.find();
+{ "_id" : ObjectId("6191f04ab1aca74c5496b89f"), "e_id" : 1, "e_fname" : "John", "e_lname" : "Doe", "salary" : 5000 }
+{ "_id" : ObjectId("6191f1deb1aca74c5496b8a0"), "e_id" : 2, "e_fname" : "Jane", "e_lname" : "Doe", "salary" : 9000 }
+{ "_id" : ObjectId("6191f1deb1aca74c5496b8a1"), "e_id" : 4, "e_fname" : "Jack", "e_lname" : "Smith", "salary" : 9000 }
+{ "_id" : ObjectId("6191f1deb1aca74c5496b8a2"), "e_id" : 10, "e_fname" : "Amy", "e_lname" : "Berry", "salary" : 6000 }
+{ "_id" : ObjectId("6191f1deb1aca74c5496b8a3"), "e_id" : 11, "e_fname" : "Joseph", "e_lname" : "M", "salary" : 8000 }
+> db.employee.find().pretty();
+{
+        "_id" : ObjectId("6191f04ab1aca74c5496b89f"),
+        "e_id" : 1,
+        "e_fname" : "John",
+        "e_lname" : "Doe",
+        "salary" : 5000
+}
+{
+        "_id" : ObjectId("6191f1deb1aca74c5496b8a0"),
+        "e_id" : 2,
+        "e_fname" : "Jane",
+        "e_lname" : "Doe",
+        "salary" : 9000
+}
+{
+        "_id" : ObjectId("6191f1deb1aca74c5496b8a1"),
+        "e_id" : 4,
+        "e_fname" : "Jack",
+        "e_lname" : "Smith",
+        "salary" : 9000
+}
+{
+        "_id" : ObjectId("6191f1deb1aca74c5496b8a2"),
+        "e_id" : 10,
+        "e_fname" : "Amy",
+        "e_lname" : "Berry",
+        "salary" : 6000
+}
+{
+        "_id" : ObjectId("6191f1deb1aca74c5496b8a3"),
+        "e_id" : 11,
+        "e_fname" : "Joseph",
+        "e_lname" : "M",
+        "salary" : 8000
+}
+> db.employee.update({"e_fname":"Amy"},{$set:{"e_fname":"Jenna"}});
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.employee.find();
+{ "_id" : ObjectId("6191f04ab1aca74c5496b89f"), "e_id" : 1, "e_fname" : "John", "e_lname" : "Doe", "salary" : 5000 }
+{ "_id" : ObjectId("6191f1deb1aca74c5496b8a0"), "e_id" : 2, "e_fname" : "Jane", "e_lname" : "Doe", "salary" : 9000 }
+{ "_id" : ObjectId("6191f1deb1aca74c5496b8a1"), "e_id" : 4, "e_fname" : "Jack", "e_lname" : "Smith", "salary" : 9000 }
+{ "_id" : ObjectId("6191f1deb1aca74c5496b8a2"), "e_id" : 10, "e_fname" : "Jenna", "e_lname" : "Berry", "salary" : 6000 }
+{ "_id" : ObjectId("6191f1deb1aca74c5496b8a3"), "e_id" : 11, "e_fname" : "Joseph", "e_lname" : "M", "salary" : 8000 }
+> db.employee.remove({"e_id":11});
+WriteResult({ "nRemoved" : 1 })
+> db.employee.find();
+{ "_id" : ObjectId("6191f04ab1aca74c5496b89f"), "e_id" : 1, "e_fname" : "John", "e_lname" : "Doe", "salary" : 5000 }
+{ "_id" : ObjectId("6191f1deb1aca74c5496b8a0"), "e_id" : 2, "e_fname" : "Jane", "e_lname" : "Doe", "salary" : 9000 }
+{ "_id" : ObjectId("6191f1deb1aca74c5496b8a1"), "e_id" : 4, "e_fname" : "Jack", "e_lname" : "Smith", "salary" : 9000 }
+{ "_id" : ObjectId("6191f1deb1aca74c5496b8a2"), "e_id" : 10, "e_fname" : "Jenna", "e_lname" : "Berry", "salary" : 6000 }
+>db.employee.find({"e_id":1});
+{ "_id" : ObjectId("6191f04ab1aca74c5496b89f"), "e_id" : 1, "e_fname" : "John", "e_lname" : "Doe", "salary" : 5000 }
+> db.employee.find({e_id:{$lt:4}}).pretty();
+{
+        "_id" : ObjectId("6191f04ab1aca74c5496b89f"),
+        "e_id" : 1,
+        "e_fname" : "John",
+        "e_lname" : "Doe",
+        "salary" : 5000
+}
+{
+        "_id" : ObjectId("6191f1deb1aca74c5496b8a0"),
+        "e_id" : 2,
+        "e_fname" : "Jane",
+        "e_lname" : "Doe",
+        "salary" : 9000
+}
+> db.employee.find({e_id:{$gte:4}}).pretty();
+{
+        "_id" : ObjectId("6191f1deb1aca74c5496b8a1"),
+        "e_id" : 4,
+        "e_fname" : "Jack",
+        "e_lname" : "Smith",
+        "salary" : 9000
+}
+{
+        "_id" : ObjectId("6191f1deb1aca74c5496b8a2"),
+        "e_id" : 10,
+        "e_fname" : "Jenna",
+        "e_lname" : "Berry",
+        "salary" : 6000
+}
+> db.employee.find({salary:{$gte:5500}},{e_id:1,e_fname:1}).pretty();
+{
+        "_id" : ObjectId("6191f1deb1aca74c5496b8a0"),
+        "e_id" : 2,
+        "e_fname" : "Jane"
+}
+{
+        "_id" : ObjectId("6191f1deb1aca74c5496b8a1"),
+        "e_id" : 4,
+        "e_fname" : "Jack"
+}
+{
+        "_id" : ObjectId("6191f1deb1aca74c5496b8a2"),
+        "e_id" : 10,
+        "e_fname" : "Jenna"
+}
+> db.employee.find({e_fname:{$in:["Jane","Amy","Jake"]}}).pretty();
+{
+        "_id" : ObjectId("6191f1deb1aca74c5496b8a0"),
+        "e_id" : 2,
+        "e_fname" : "Jane",
+        "e_lname" : "Doe",
+        "salary" : 9000
+}
+> db.employee.save({"e_id":12,"e_fname":"Samuel","e_lname":"Jackson","salary":100000});
+WriteResult({ "nInserted" : 1 })
+> db.employee.find({e_id:12}).pretty();
+{
+        "_id" : ObjectId("6191fa2fb1aca74c5496b8a4"),
+        "e_id" : 12,
+        "e_fname" : "Samuel",
+        "e_lname" : "Jackson",
+        "salary" : 100000
+}
+> db.employee.find({$and:[{salary:{$lte:9000}},{e_lname:"Doe"}]}).pretty();
+{
+        "_id" : ObjectId("6191f04ab1aca74c5496b89f"),
+        "e_id" : 1,
+        "e_fname" : "John",
+        "e_lname" : "Doe",
+        "salary" : 5000
+}
+{
+        "_id" : ObjectId("6191f1deb1aca74c5496b8a0"),
+        "e_id" : 2,
+        "e_fname" : "Jane",
+        "e_lname" : "Doe",
+        "salary" : 9000
+}
+> db.employee.find({$or:[{salary:{$lte:9000}},{e_lname:"Doe"}]}).pretty();
+{
+        "_id" : ObjectId("6191f04ab1aca74c5496b89f"),
+        "e_id" : 1,
+        "e_fname" : "John",
+        "e_lname" : "Doe",
+        "salary" : 5000
+}
+{
+        "_id" : ObjectId("6191f1deb1aca74c5496b8a0"),
+        "e_id" : 2,
+        "e_fname" : "Jane",
+        "e_lname" : "Doe",
+        "salary" : 9000
+}
+{
+        "_id" : ObjectId("6191f1deb1aca74c5496b8a1"),
+        "e_id" : 4,
+        "e_fname" : "Jack",
+        "e_lname" : "Smith",
+        "salary" : 9000
+}
+{
+        "_id" : ObjectId("6191f1deb1aca74c5496b8a2"),
+        "e_id" : 10,
+        "e_fname" : "Jenna",
+        "e_lname" : "Berry",
+        "salary" : 6000
+}

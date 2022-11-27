@@ -1,0 +1,146 @@
+Microsoft Windows [Version 10.0.19043.1288]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\aryan>cd C:\Program Files\MongoDB\Server\5.0\bin
+
+C:\Program Files\MongoDB\Server\5.0\bin>mongo
+MongoDB shell version v5.0.3
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("7fa67dc8-b75c-4776-aa9b-9b6a70b4e100") }
+MongoDB server version: 5.0.3
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in
+an upcoming release.
+We recommend you begin using "mongosh".
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+================
+---
+The server generated these startup warnings when booting:
+        2021-11-14T18:55:51.510+05:30: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+---
+---
+        Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+        metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+
+        The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+        and anyone you share the URL with. MongoDB may use this information to make product
+        improvements and to suggest MongoDB products and deployment options to you.
+
+        To enable free monitoring, run the following command: db.enableFreeMonitoring()
+        To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+---
+> use B3;
+switched to db B3
+> db.createCollection('students');
+{ "ok" : 1 }
+> db.students.insert({"roll":1,"name":"John","subject":"Maths","marks":90,"status":"Pass"});
+WriteResult({ "nInserted" : 1 })
+> db.students.insertMany([{"roll":2,"name":"Jane","subject":"Physics","marks":40,"status":"Fail"},
+... {"roll":1,"name":"John","subject":"Physics","marks":60,"status":"Pass"},
+... {"roll":3,"name":"Brad","subject":"Maths","marks":40,"status":"Fail"},
+... {"roll":3,"name":"Brad","subject":"Physics","marks":70,"status":"Pass"},
+... {"roll":2,"name":"Jane","subject":"Maths","marks":80,"status":"Pass"},
+... {"roll":4,"name":"Jenna","subject":"Maths","marks":75,"status":"Pass"},
+... {"roll":4,"name":"Jenna","subject":"Physics","marks":67,"status":"Pass"}]);
+{
+        "acknowledged" : true,
+        "insertedIds" : [
+                ObjectId("6199e66eea9db59500e4daff"),
+                ObjectId("6199e66eea9db59500e4db00"),
+                ObjectId("6199e66eea9db59500e4db01"),
+                ObjectId("6199e66eea9db59500e4db02"),
+                ObjectId("6199e66eea9db59500e4db03"),
+                ObjectId("6199e66eea9db59500e4db04"),
+                ObjectId("6199e66eea9db59500e4db05")
+        ]
+}
+> db.students.find().pretty();
+{
+        "_id" : ObjectId("6199e4b4ea9db59500e4dafe"),
+        "roll" : 1,
+        "name" : "John",
+        "subject" : "Maths",
+        "marks" : 90,
+        "status" : "Pass"
+}
+{
+        "_id" : ObjectId("6199e66eea9db59500e4daff"),
+        "roll" : 2,
+        "name" : "Jane",
+        "subject" : "Physics",
+        "marks" : 40,
+        "status" : "Fail"
+}
+{
+        "_id" : ObjectId("6199e66eea9db59500e4db00"),
+        "roll" : 1,
+        "name" : "John",
+        "subject" : "Physics",
+        "marks" : 60,
+        "status" : "Pass"
+}
+{
+        "_id" : ObjectId("6199e66eea9db59500e4db01"),
+        "roll" : 3,
+        "name" : "Brad",
+        "subject" : "Maths",
+        "marks" : 40,
+        "status" : "Fail"
+}
+{
+        "_id" : ObjectId("6199e66eea9db59500e4db02"),
+        "roll" : 3,
+        "name" : "Brad",
+        "subject" : "Physics",
+        "marks" : 70,
+        "status" : "Pass"
+}
+{
+        "_id" : ObjectId("6199e66eea9db59500e4db03"),
+        "roll" : 2,
+        "name" : "Jane",
+        "subject" : "Maths",
+        "marks" : 80,
+        "status" : "Pass"
+}
+{
+        "_id" : ObjectId("6199e66eea9db59500e4db04"),
+        "roll" : 4,
+        "name" : "Jenna",
+        "subject" : "Maths",
+        "marks" : 75,
+        "status" : "Pass"
+}
+{
+        "_id" : ObjectId("6199e66eea9db59500e4db05"),
+        "roll" : 4,
+        "name" : "Jenna",
+        "subject" : "Physics",
+        "marks" : 67,
+        "status" : "Pass"
+}
+> var mapFunction1=function(){
+... emit(this.name, this.marks);};
+> var reduceFunction1=function(keyName, valuesMarks){
+... return Array.sum(valuesMarks);};
+> db.students.mapReduce(
+... mapFunction1,
+... reduceFunction1,
+... { out:"Map_Reduce_1",
+... query:{status:"Pass"},
+... sort:{roll:-1}
+... }
+... );
+{ "result" : "Map_Reduce_1", "ok" : 1 }
+> db.Map_Reduce_1.find().pretty();
+{ "_id" : "Jenna", "value" : 142 }
+{ "_id" : "Brad", "value" : 70 }
+{ "_id" : "John", "value" : 150 }
+{ "_id" : "Jane", "value" : 80 }
+> db.students.mapReduce( mapFunction1, reduceFunction1, { out:"Map_Reduce_2", query:{status:"Pass"}, sort:{roll:-1},limit:2 } );
+{ "result" : "Map_Reduce_2", "ok" : 1 }
+> db.Map_Reduce_2.find().pretty();
+{ "_id" : "Brad", "value" : 70 }
+{ "_id" : "Jenna", "value" : 142 }

@@ -1,0 +1,55 @@
+MySQL Queries: 
+1. Creating Tables:
+Create database assignment4;
+Use assignment4;
+CREATE TABLE BORROWER(
+Roll_no int AUTO_INCREMENT NOT NULL primary key,
+Name varchar(25),
+Name_of_book varchar(50),
+Date_of_Issue date,
+status char(5));
+CREATE TABLE FINE(
+Roll_no int,
+Date_of_Fine date,
+amt int,
+foreign key(Roll_no) references Borrower(Roll_no) on update cascade,
+foreign key(Roll_no) references Borrower(Roll_no) on delete cascade);
+2. Inserting values:
+insert into BORROWER values(NULL,'Jane','DBMS','2019-08-17','I');
+insert into BORROWER values(NULL,'John','CNS','2020-01-17','I');
+insert into BORROWER values(NULL,'Johnathan','ML','2021-01-17','I');
+insert into BORROWER values(NULL,'Jessie','AI','2020-09-17','I');
+insert into BORROWER values(NULL,'Johanna','CyberSecurity','2021-05-
+08','I');
+select * from BORROWER;
+3. Procedure:
+delimiter //
+CREATE PROCEDURE calc_fine(rollno int,bname varchar(50))
+PROC:Begin
+declare amount int;
+declare issueDate date;
+ declare stat char(5);
+ declare exit handler for sqlexception select 'Table not found';
+select Date_of_Issue into issueDate from BORROWER where 
+Roll_no=rollno and Name_of_book=bname;
+ select status into stat from BORROWER where Roll_no=rollno and 
+Name_of_book=bname;
+ if stat='R' then leave PROC;
+ else
+if(datediff(curdate(),issueDate)>15 and 
+datediff(curdate(),issueDate)<=30) then
+insert into FINE 
+values(rollno,curdate(),datediff(curdate(),issueDate)*5);
+elseif(datediff(curdate(),issueDate)>30) then
+insert into FINE 
+values(rollno,curdate(),datediff(curdate(),issueDate)*50);
+else
+insert into FINE values(rollno,curdate(),0);
+end if;
+ end if;
+ update Borrower set status='R' where Roll_no=rollno and 
+Name_of_book=bname;
+END //
+delimiter ;
+call calc_fine(1,'DBMS');
+call calc_fine(4,'AI');

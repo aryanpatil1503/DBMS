@@ -1,0 +1,60 @@
+create database assignment7;
+use assignment7;
+#drop database assignment7;
+CREATE TABLE Library(rollno INT PRIMARY KEY, student_name VARCHAR(20), book VARCHAR(20), 
+	date_of_issue DATE, price INT);
+CREATE TABLE Library_Audit(Action_Performed VARCHAR(20), DateAndTime DATETIME, stu_roll_no INT REFERENCES Library(rollno), 
+	student_name VARCHAR(20), book VARCHAR(20), date_of_issue DATE, price INT);
+    
+INSERT INTO Library VALUES
+	(21, 'Malay', 'Maths', '2021-01-01', 2500),
+	(22, 'Rishi', 'Physics', '2021-09-03', 1500),
+	(19, 'Shubh', 'OOP', '2021-07-10', 1750),
+	(37, 'Megh', 'Maths', '2021-10-05', 2500),
+	(55, 'Gauri', 'OOP', '2021-07-11', 1750),
+	(16, 'Deep', 'Physics', '2021-03-07', 1500),
+	(45, 'Jay', 'DSA', '2021-02-18', 1250),
+	(27, 'Beejal', 'DSA', '2021-12-01', 1250);
+	
+  
+DELIMITER $$
+CREATE TRIGGER trig_library_insert AFTER INSERT ON library 
+FOR EACH ROW
+BEGIN
+	INSERT INTO Library_Audit VALUES ("INSERT", NOW(), NEW.rollno, NEW.student_name, NEW.book, NEW.date_of_issue, NEW.price);
+END $$ 
+  
+DELIMITER $$
+CREATE TRIGGER trig_library_update AFTER UPDATE ON library 
+FOR EACH ROW
+BEGIN
+	INSERT INTO Library_Audit VALUES ("UPDATE", NOW(), OLD.rollno, OLD.student_name, OLD.book, OLD.date_of_issue, OLD.price);
+END $$
+
+DELIMITER $$
+CREATE TRIGGER trig_library_delete AFTER DELETE ON library 
+FOR EACH ROW
+BEGIN
+	INSERT INTO Library_Audit VALUES ("DELETE", NOW(), OLD.rollno, OLD.student_name, OLD.book, OLD.date_of_issue, OLD.price);
+END $$
+
+DELIMITER ;
+SELECT * FROM Library;
+ 
+
+SELECT * FROM Library_Audit;
+ 
+
+
+UPDATE Library SET student_name = "Akshay" WHERE student_name = "Rishi";
+DELETE FROM Library WHERE student_name = "Malay";
+DELETE FROM Library WHERE book = "Maths";
+INSERT INTO Library VALUES(31, 'Tejas', 'OOP', '2021-09-24', 1480);
+INSERT INTO Library VALUES(43, 'Mitesh', 'Physics', '2021-04-16', 1650);
+
+SELECT * FROM Library;
+ 
+
+SELECT * FROM Library_Audit;
+ 
+

@@ -1,0 +1,51 @@
+CREATE DATABASE assignment5;
+use assignment5;
+create table STUD_MARKS(Name varchar(20) not null primary key,total_marks int);
+create table RESULT(Roll int primary key,Name varchar(20),Class varchar(30),foreign 
+key(Name) references Stud_Marks(Name) on delete cascade);
+insert into STUD_MARKS (Name,total_marks) values ("Shubh",1320);
+insert into STUD_MARKS (Name,total_marks) values ("Parth",1200);
+insert into STUD_MARKS (Name,total_marks) values ("Malay",890);
+insert into STUD_MARKS (Name,total_marks) values ("Rutuja",840);
+insert into STUD_MARKS (Name,total_marks) values ("Rishi",989);
+insert into STUD_MARKS (Name,total_marks) values ("Riya",830);
+select * from STUD_MARKS;
+insert into RESULT (Roll,Name) values (1,"Shubh");
+insert into RESULT (Roll,Name) values (2,"Parth");
+insert into RESULT (Roll,Name) values (3,"Malay");
+insert into RESULT (Roll,Name) values (4,"Rutuja");
+insert into RESULT (Roll,Name) values (5,"Rishi");
+insert into RESULT (Roll,Name) values (6,"Riya");
+select * from RESULT;
+DELIMITER //
+create procedure get_grades(in rno int,out grade varchar(30))
+BEGIN
+ declare marks int;
+declare exit handler for not found set grade='Roll no does not exists';
+ select total_marks into marks from STUD_MARKS where Name=(select Name from 
+RESULT where Roll=rno);
+ if marks>=990 and marks<=1500 then
+select "Distinction" into grade;
+ elseif marks>=900 and marks <=989 then
+ select "First Class" into grade;
+elseif marks>=825 and marks<=899 then
+select "Higher Second Class" into grade;
+end if;
+ update RESULT set Class=grade where Roll=rno;
+END ;
+// DELIMITER ;
+DELIMITER //
+create function func_grades(rno int)
+returns varchar(30)
+deterministic
+begin
+declare grade varchar(30);
+call get_grades(rno,grade);
+return grade;
+end;
+// DELIMITER ;
+select func_grades(2);
+select func_grades(6); 
+select func_grades(5);
+select func_grades(1);
+select * from RESULT

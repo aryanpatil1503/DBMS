@@ -1,0 +1,245 @@
+CREATE DATABASE ASSIGNMENT3;
+use ASSIGNMENT3;
+CREATE TABLE DEPARTMENTS(dept_id int not null auto_increment primary key,dept_name varchar(20));
+
+create table PROFESSORS(prof_id int not null primary key,prof_fname varchar(30),prof_lname varchar(30),dept_id int,designation varchar(30),salary int,email varchar(45),phone long,city varchar(30),doj date,foreign key(dept_id) references DEPARTMENTS(dept_id) on delete cascade,foreign key(dept_id) references DEPARTMENTS(dept_id) on update cascade);
+
+create table works(prof_id int,dept_id int,duration time primary key,foreign key(prof_id) references Professors(prof_id) on delete cascade , foreign key(prof_id) references Professors(prof_id) on update cascade,foreign key(dept_id) references Departments(dept_id) on delete cascade,foreign key(dept_id) references Departments(dept_id) on update cascade);
+
+
+create table Shift(prof_id int ,shift int,working_hours time,foreign key(prof_id) references Professors(prof_id) on delete cascade,foreign key(prof_id) references Professors(prof_id) on update cascade);
+
+ desc departments;
++-----------+-------------+------+-----+---------+----------------+
+| Field     | Type        | Null | Key | Default | Extra          |
++-----------+-------------+------+-----+---------+----------------+
+| dept_id   | int         | NO   | PRI | NULL    | auto_increment |
+| dept_name | varchar(20) | YES  |     | NULL    |                |
++-----------+-------------+------+-----+---------+----------------+
+
+desc professors;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| prof_id     | int         | NO   | PRI | NULL    |       |
+| prof_fname  | varchar(30) | YES  |     | NULL    |       |
+| prof_lname  | varchar(30) | YES  |     | NULL    |       |
+| dept_id     | int         | YES  | MUL | NULL    |       |
+| designation | varchar(30) | YES  |     | NULL    |       |
+| salary      | int         | YES  |     | NULL    |       |
+| email       | varchar(45) | YES  |     | NULL    |       |
+| phone       | mediumtext  | YES  |     | NULL    |       |
+| city        | varchar(30) | YES  |     | NULL    |       |
+| doj         | date        | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+
+ desc works;
++----------+------+------+-----+---------+-------+
+| Field    | Type | Null | Key | Default | Extra |
++----------+------+------+-----+---------+-------+
+| prof_id  | int  | YES  | MUL | NULL    |       |
+| dept_id  | int  | YES  | MUL | NULL    |       |
+| duration | time | NO   | PRI | NULL    |       |
++----------+------+------+-----+---------+-------+
+
+ desc shift;
++---------------+------+------+-----+---------+-------+
+| Field         | Type | Null | Key | Default | Extra |
++---------------+------+------+-----+---------+-------+
+| prof_id       | int  | YES  | MUL | NULL    |       |
+| shift         | int  | YES  |     | NULL    |       |
+| working_hours | time | YES  |     | NULL    |       |
++---------------+------+------+-----+---------+-------+
+Inserting records:
+insert into Departments values(null,'Comp'),(null,'ENTC'),(null,'IT'),(null,'CHEM'),(null,'MECH'),(null,'FE');
+
+select * from departments;
++---------+-----------+
+| dept_id | dept_name |
++---------+-----------+
+|       1 | Comp      |
+|       2 | IT        |
+|       3 | ENTC      |
+|       4 | CHEM      |
+|       5 | MECH      |
+|       6 | FE        |
++---------+-----------+
+
+insert into professors values(101, 'Omkar', 'Deodhar', 01, 'Director', 70000, 'omdeo@mail.com',9876543210,'Pune','2015-01-31'),(237, 'Sonali', 'Deodhar', 02, 'Dept Head', 70000, 'sondeo@mail.com',8896553210,'Pune','2013-02-01'),(394, 'Hrishikesh', 'Singh', 03, 'Dept Head', 70000, 'hrisingh@mail.com',9573843212,'Mumbai','2016-04-21'),(404, 'Sameer', 'Date', 04, 'subject coordinator', 50000, 'sdate@mail.com',8866443210,'Nagpur','2015-03-11'),(233, 'Mayuresh', 'Nivatkar', 02, 'subject coordinator', 45000, 'Mniv@mail.com',9876543210,'Mumbai','2017-08-10'),(119, 'Amrita', 'Khatri', 06, 'Dept Vice Head', 45000, 'amkhatri@mail.com',9478345210,'Satara','2014-05-13'),(367, 'Esha', 'Shenoy', 05, 'Dept Vice Head', 45000, 'eshht@mail.com',9969543210,'Pune','2015-11-12'),(412, 'Shubham', 'Soni', 04, 'Dept Vice Head', 40000, 'shubhs@mail.com',9356533210,'Nagpur','2016-01-31');
+
+select * from professors;
++---------+------------+------------+---------+---------------------+--------+-------------------+------------+--------+------------+
+| prof_id | prof_fname | prof_lname | dept_id | designation         | salary | email             | phone      | city   | doj        |
++---------+------------+------------+---------+---------------------+--------+-------------------+------------+--------+------------+
+|     101 | Omkar      | Deodhar    |       1 | Director            |  70000 | omdeo@mail.com    | 9876543210 | Pune   | 2015-01-31 |
+|     119 | Amrita     | Khatri     |       6 | Dept Vice Head      |  45000 | amkhatri@mail.com | 9478345210 | Satara | 2014-05-13 |
+|     233 | Mayuresh   | Nivatkar   |       2 | subject coordinator |  45000 | Mniv@mail.com     | 9876543210 | Mumbai | 2017-08-10 |
+|     237 | Sonali     | Deodhar    |       2 | Dept Head           |  70000 | sondeo@mail.com   | 8896553210 | Pune   | 2013-02-01 |
+|     367 | Esha       | Shenoy     |       5 | Dept Vice Head      |  45000 | eshht@mail.com    | 9969543210 | Pune   | 2015-11-12 |
+|     394 | Hrishikesh | Singh      |       3 | Dept Head           |  70000 | hrisingh@mail.com | 9573843212 | Mumbai | 2016-04-21 |
+|     404 | Sameer     | Date       |       4 | subject coordinator |  50000 | sdate@mail.com    | 8866443210 | Nagpur | 2015-03-11 |
+|     412 | Shubham    | Soni       |       4 | Dept Vice Head      |  40000 | shubhs@mail.com   | 9356533210 | Nagpur | 2016-01-31 |
++---------+------------+------------+---------+---------------------+--------+-------------------+------------+--------+------------+
+
+ insert into works values(101, 01, '06:00'),(237, 02, '07:00'),(394, 03, '06:30'),(404, 04, '05:00'),(233, 02, '04:30'),(119, 06, '05:30'),(367, 05, '07:30'),(412, 04, '04:00');
+
+ select * from works;
++---------+---------+----------+
+| prof_id | dept_id | duration |
++---------+---------+----------+
+|     412 |       4 | 04:00:00 |
+|     233 |       2 | 04:30:00 |
+|     404 |       4 | 05:00:00 |
+|     119 |       6 | 05:30:00 |
+|     101 |       1 | 06:00:00 |
+|     394 |       3 | 06:30:00 |
+|     237 |       2 | 07:00:00 |
+|     367 |       5 | 07:30:00 |
++---------+---------+----------+
+
+ insert into Shift values(101, 01, '06:00'),(237, 01, '06:00'),(394, 01, '06:00'),(404, 02, '05:00'),(233, 02, '04:30'),(119, 02, '04:30'),(367, 01, '04:30'),(412, 02, '04:00');
+
+
+ select * from shift;
++---------+-------+---------------+
+| prof_id | shift | working_hours |
++---------+-------+---------------+
+|     101 |     1 | 06:00:00      |
+|     237 |     1 | 06:00:00      |
+|     394 |     1 | 06:00:00      |
+|     404 |     2 | 05:00:00      |
+|     233 |     2 | 04:30:00      |
+|     119 |     2 | 04:30:00      |
+|     367 |     1 | 04:30:00      |
+|     412 |     2 | 04:00:00      |
++---------+-------+---------------+
+
+queries:
+
+1. Find the professor details and department details using NATURAL JOIN
+
+ select * from Departments
+    -> natural join professors;
++---------+-----------+---------+------------+------------+---------------------+--------+-------------------+------------+--------+------------+
+| dept_id | dept_name | prof_id | prof_fname | prof_lname | designation         | salary | email             | phone      | city   | doj        |
++---------+-----------+---------+------------+------------+---------------------+--------+-------------------+------------+--------+------------+
+|       1 | Comp      |     101 | Omkar      | Deodhar    | Director            |  70000 | omdeo@mail.com    | 9876543210 | Pune   | 2015-01-31 |
+|       6 | FE        |     119 | Amrita     | Khatri     | Dept Vice Head      |  45000 | amkhatri@mail.com | 9478345210 | Satara | 2014-05-13 |
+|       2 | ENTC      |     233 | Mayuresh   | Nivatkar   | subject coordinator |  45000 | Mniv@mail.com     | 9876543210 | Mumbai | 2017-08-10 |
+|       2 | ENTC      |     237 | Sonali     | Deodhar    | Dept Head           |  70000 | sondeo@mail.com   | 8896553210 | Pune   | 2013-02-01 |
+|       5 | MECH      |     367 | Esha       | Shenoy     | Dept Vice Head      |  45000 | eshht@mail.com    | 9969543210 | Pune   | 2015-11-12 |
+|       3 | IT        |     394 | Hrishikesh | Singh      | Dept Head           |  70000 | hrisingh@mail.com | 9573843212 | Mumbai | 2016-04-21 |
+|       4 | CHEM      |     404 | Sameer     | Date       | subject coordinator |  50000 | sdate@mail.com    | 8866443210 | Nagpur | 2015-03-11 |
+|       4 | CHEM      |     412 | Shubham    | Soni       | Dept Vice Head      |  40000 | shubhs@mail.com   | 9356533210 | Nagpur | 2016-01-31 |
++---------+-----------+---------+------------+------------+---------------------+--------+-------------------+------------+--------+------------+
+
+2. Find the prof_id, prof_name and shift. (INNER JOIN)
+ select p.prof_id, p.prof_fname, p.prof_lname , s.shift
+    -> from Professors as p
+    -> inner join Shift as s
+    -> using (prof_id);
++---------+------------+------------+-------+
+| prof_id | prof_fname | prof_lname | shift |
++---------+------------+------------+-------+
+|     101 | Omkar      | Deodhar    |     1 |
+|     119 | Amrita     | Khatri     |     2 |
+|     233 | Mayuresh   | Nivatkar   |     2 |
+|     237 | Sonali     | Deodhar    |     1 |
+|     367 | Esha       | Shenoy     |     1 |
+|     394 | Hrishikesh | Singh      |     1 |
+|     404 | Sameer     | Date       |     2 |
+|     412 | Shubham    | Soni       |     2 |
++---------+------------+------------+-------+
+
+3. List all the department details and the corresponding names of professors in the samedepartment.(left outer join)
+select d.*, p.prof_fname, p.prof_lname
+    -> from Departments as d
+    -> left join Professors as p
+    -> on d.dept_id = p.dept_id;
++---------+-----------+------------+------------+
+| dept_id | dept_name | prof_fname | prof_lname |
++---------+-----------+------------+------------+
+|       1 | Comp      | Omkar      | Deodhar    |
+|       2 | ENTC      | Mayuresh   | Nivatkar   |
+|       2 | ENTC      | Sonali     | Deodhar    |
+|       3 | IT        | Hrishikesh | Singh      |
+|       4 | CHEM      | Sameer     | Date       |
+|       4 | CHEM      | Shubham    | Soni       |
+|       5 | MECH      | Esha       | Shenoy     |
+|       6 | FE        | Amrita     | Khatri     |
++---------+-----------+------------+------------+
+
+4. List all the professors and the corresponding names of department.(right outer join)
+select p.prof_fname, p.prof_lname, d.dept_name
+    -> from Professors as p
+    -> right join Departments as d
+    -> using(dept_id);
++------------+------------+-----------+
+| prof_fname | prof_lname | dept_name |
++------------+------------+-----------+
+| Omkar      | Deodhar    | Comp      |
+| Mayuresh   | Nivatkar   | ENTC      |
+| Sonali     | Deodhar    | ENTC      |
+| Hrishikesh | Singh      | IT        |
+| Sameer     | Date       | CHEM      |
+| Shubham    | Soni       | CHEM      |
+| Esha       | Shenoy     | MECH      |
+| Amrita     | Khatri     | FE        |
++------------+------------+-----------+
+
+5. Display professor name, dept_name, shift, salary where prof_id = 101;(multitable join)
+select p.prof_fname, p.prof_lname, d.dept_name, p.salary, s.shift
+    -> from Professors as p
+    -> inner join Departments as d
+    -> on p.dept_id = d.dept_id
+    -> inner join Shift as s
+    -> using(prof_id)
+    -> where prof_id=101;
++------------+------------+-----------+--------+-------+
+| prof_fname | prof_lname | dept_name | salary | shift |
++------------+------------+-----------+--------+-------+
+| Omkar      | Deodhar    | Comp      |  70000 |     1 |
++------------+------------+-----------+--------+-------+
+
+6. list the total number of professor in each department.(count and any join,groupby)
+select d.dept_name, p.dptID
+    -> from Departments d
+    -> inner join (select dept_id,count(*) as dptID
+    -> from Professors
+    -> group by dept_id) p
+    -> using(dept_id);
++-----------+-------+
+| dept_name | dptID |
++-----------+-------+
+| Comp      |     1 |
+| ENTC      |     2 |
+| IT        |     1 |
+| CHEM      |     2 |
+| MECH      |     1 |
+| FE        |     1 |
++-----------+-------+
+
+7. List the prof_id associated department and the dept_name having name ‘computer’;(subquery)
+select prof_fname, prof_lname
+    -> from Professors
+    -> where dept_id in
+    -> (select dept_id from Departments  where dept_name='Comp');
++------------+------------+
+| prof_fname | prof_lname |
++------------+------------+
+| Omkar      | Deodhar    |
++------------+------------+
+
+8. Find the names of all departments where the professors joined in year 2015 (or date of joining is1-1-2015).(subquery)
+select d.dept_name, p.prof_fname, p.prof_lname
+    -> from Departments as d
+    -> right join Professors as p
+    -> using(dept_id)
+    -> where YEAR(p.doj)=2015;
++-----------+------------+------------+
+| dept_name | prof_fname | prof_lname |
++-----------+------------+------------+
+| Comp      | Omkar      | Deodhar    |
+| MECH      | Esha       | Shenoy     |
+| CHEM      | Sameer     | Date       |
++-----------+------------+------------+
